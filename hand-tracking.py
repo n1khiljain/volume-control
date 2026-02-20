@@ -3,7 +3,7 @@ import cv2
 import mediapipe as mp
 import time
 from draw_utils import draw_hand_landmarks
-from normalize import get_distance
+from normalize import get_distance, get_pinch_ratio, ratio_to_brightness
 import math
 
 # Setup
@@ -37,7 +37,8 @@ with mp.tasks.vision.HandLandmarker.create_from_options(options) as landmarker:
 
             h, w, _ = frame.shape
 
-            distance = get_distance(thumb_tip, index_tip, w, h)
+            ratio = get_pinch_ratio(hand_landmarks, w, h)
+            brightness = ratio_to_brightness(ratio)
 
             draw_hand_landmarks(frame, hand_landmarks)
         
