@@ -1,7 +1,9 @@
+from webbrowser import get
 import cv2
 import mediapipe as mp
 import time
 from draw_utils import draw_hand_landmarks
+from normalize import get_distance
 import math
 
 # Setup
@@ -34,11 +36,8 @@ with mp.tasks.vision.HandLandmarker.create_from_options(options) as landmarker:
             index_tip = hand_landmarks[8]
 
             h, w, _ = frame.shape
-            thumb_pos = (int(thumb_tip.x * w), int(thumb_tip.y * h))
-            index_pos = (int(index_tip.x * w), int(index_tip.y * h))
 
-            distance = math.hypot(index_pos[0] - thumb_pos[0], index_pos[1] - thumb_pos[1])
-            print(distance)
+            distance = get_distance(thumb_tip, index_tip, w, h)
 
             draw_hand_landmarks(frame, hand_landmarks)
         
